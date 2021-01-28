@@ -20,7 +20,7 @@ namespace Bicep.Core.Syntax
             AssertTokenType(keyword, nameof(keyword), TokenType.Identifier);
             AssertSyntaxType(assignment, nameof(assignment), typeof(Token), typeof(SkippedTriviaSyntax));
             AssertTokenType(assignment as Token, nameof(assignment), TokenType.Assignment);
-            AssertSyntaxType(value, nameof(value), typeof(SkippedTriviaSyntax), typeof(ObjectSyntax), typeof(IfConditionSyntax));
+            AssertSyntaxType(value, nameof(value), typeof(SkippedTriviaSyntax), typeof(ObjectSyntax), typeof(IfConditionSyntax), typeof(ForSyntax));
 
             this.Keyword = keyword;
             this.Name = name;
@@ -76,6 +76,7 @@ namespace Bicep.Core.Syntax
             {
                 ObjectSyntax @object => @object,
                 IfConditionSyntax ifCondition => ifCondition.Body as ObjectSyntax,
+                ForSyntax @for => @for.Body as ObjectSyntax,
                 SkippedTriviaSyntax => null,
 
                 // blocked by assert in the constructor

@@ -681,10 +681,10 @@ namespace Bicep.Core.Diagnostics
                 "An empty indexer is not allowed. Specify a valid expression."
             );
 
-            public ErrorDiagnostic ExpectBodyStartOrIf() => new(
+            public ErrorDiagnostic ExpectBodyStartOrIfOrLoopStart() => new(
                 TextSpan,
                 "BCP118",
-                "Expected the \"{\" character or the \"if\" keyword at this location.");
+                "Expected the \"{\" character, the \"[\" character, or the \"if\" keyword at this location.");
 
             public Diagnostic InvalidExtensionResourceScope() => new(
                 TextSpan,

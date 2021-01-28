@@ -215,7 +215,8 @@ namespace Bicep.Core.Parsing
                     {
                         TokenType.Identifier when current.Text == LanguageConstants.IfKeyword => this.IfCondition(),
                         TokenType.LeftBrace => this.Object(),
-                        _ => throw new ExpectedTokenException(current, b => b.ExpectBodyStartOrIf())
+                        TokenType.LeftSquare => this.ForExpression(),
+                        _ => throw new ExpectedTokenException(current, b => b.ExpectBodyStartOrIfOrLoopStart())
                     };
                 },
                 GetSuppressionFlag(assignment),
@@ -243,7 +244,8 @@ namespace Bicep.Core.Parsing
                     {
                         TokenType.Identifier when current.Text == LanguageConstants.IfKeyword => this.IfCondition(),
                         TokenType.LeftBrace => this.Object(),
-                        _ => throw new ExpectedTokenException(current, b => b.ExpectBodyStartOrIf())
+                        TokenType.LeftSquare => this.ForExpression(),
+                        _ => throw new ExpectedTokenException(current, b => b.ExpectBodyStartOrIfOrLoopStart())
                     };
                 },
                 GetSuppressionFlag(assignment),
@@ -411,7 +413,7 @@ namespace Bicep.Core.Parsing
 
                 case TokenType.LeftSquare when allowComplexLiterals:
                     return CheckKeyword(this.reader.PeekAhead(), LanguageConstants.ForKeyword) 
-                        ? this.LoopExpression() 
+                        ? this.ForExpression() 
                         : this.Array();
 
                 case TokenType.LeftBrace:
@@ -779,7 +781,7 @@ namespace Bicep.Core.Parsing
             }
         }
 
-        private SyntaxBase LoopExpression()
+        private SyntaxBase ForExpression()
         {
             var openBracket = Expect(TokenType.LeftSquare, b => b.ExpectedCharacter("["));
             var forKeyword = ExpectKeyword(LanguageConstants.ForKeyword);
